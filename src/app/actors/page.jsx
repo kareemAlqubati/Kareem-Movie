@@ -13,7 +13,7 @@ export default function ActorsPage() {
     const fetchActors = async () => {
       try {
         const res = await fetch(
-          `https://api.themoviedb.org/3/person/popular?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&page=${page}`
+          `https://api.themoviedb.org/3/person/popular?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&page=${page}&include_adult=false`
         );
         const data = await res.json();
         setActors(data.results || []);

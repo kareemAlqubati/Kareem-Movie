@@ -19,7 +19,7 @@ const Login = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log('Login successful'); 
-      router.push('/'); // Redirect to homepage after successful login
+      router.push('/'); 
     } catch (error) {
       console.error('Login failed:', error); 
       switch (error.code) {

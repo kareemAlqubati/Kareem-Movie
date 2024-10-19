@@ -6,14 +6,11 @@ import { useState } from 'react';
 export default function SearchForm() {
   const [searchTerm, setSearchTerm] = useState('');
 
-
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchTerm.trim()) {
-      return; // Do nothing if the search term is empty
+      return; 
     }
-
-    // Navigate to the search results page
     router.push(`/search/${searchTerm}`);
   };
 

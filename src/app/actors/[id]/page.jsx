@@ -15,8 +15,8 @@ export default function ActorDetailsPage({ params }) {
   const fetchData = async (id) => {
     try {
       const [actorRes, moviesRes] = await Promise.all([
-        fetch(`https://api.themoviedb.org/3/person/${id}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US`),
-        fetch(`https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US`)
+        fetch(`https://api.themoviedb.org/3/person/${id}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`),
+        fetch(`https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`)
       ]);
 
       if (!actorRes.ok || !moviesRes.ok) {

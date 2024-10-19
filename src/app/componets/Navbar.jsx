@@ -18,7 +18,7 @@ export default function Navbar() {
     const fetchGenres = async () => {
       try {
         const res = await fetch(
-          'https://api.themoviedb.org/3/genre/movie/list?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US'
+          'https://api.themoviedb.org/3/genre/movie/list?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false'
         );
         const data = await res.json();
         setGenres(data.genres || []);

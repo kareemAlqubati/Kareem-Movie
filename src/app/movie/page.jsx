@@ -1,18 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation'; // To access URL search params
+import { useSearchParams } from 'next/navigation'; 
 import Link from 'next/link';
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(true); // State to track loading status
-  const [error, setError] = useState(null); // State to track any errors
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null);
 
-  const searchParams = useSearchParams(); // To get the category from URL params
-  const category = searchParams.get('category') || 'now_playing'; // Default to 'now_playing' if no category
-
-  // Function to return the API endpoint based on the category
+  const searchParams = useSearchParams(); 
+  const category = searchParams.get('category') || 'now_playing'; 
   const getCategoryApiUrl = (category) => {
     switch (category) {
       case 'top-rated':
@@ -24,19 +22,19 @@ export default function MoviesPage() {
       case 'upcoming':
         return 'https://api.themoviedb.org/3/movie/upcoming';
       default:
-        return 'https://api.themoviedb.org/3/movie/now_playing'; // Default API for now playing
+        return 'https://api.themoviedb.org/3/movie/now_playing'; 
     }
   };
 
   useEffect(() => {
     const fetchMovies = async () => {
-      setLoading(true); // Start loading
-      setError(null); // Reset error state
+      setLoading(true); 
+      setError(null); 
 
       const apiUrl = getCategoryApiUrl(category);
       try {
         const response = await fetch(
-          `${apiUrl}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&page=1`
+          `${apiUrl}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&page=1&include_adult=false`
         );
 
         if (!response.ok) {
@@ -51,14 +49,14 @@ export default function MoviesPage() {
         }
       } catch (error) {
         console.error('Failed to fetch movies:', error);
-        setError('Failed to fetch movies. Please try again later.'); // Update error state
+        setError('Failed to fetch movies. Please try again later.'); 
       } finally {
-        setLoading(false); // End loading
+        setLoading(false); 
       }
     };
 
     fetchMovies();
-  }, [category]); // Re-run the effect when category changes
+  }, [category]); 
 
   return (
     <div className="container mx-auto p-4">
@@ -66,9 +64,9 @@ export default function MoviesPage() {
         {category.replace('-', ' ')} Movies
       </h1>
 
-      {loading && <p className="text-white">Loading movies...</p>} {/* Loading message */}
+      {loading && <p className="text-white">Loading movies...</p>} 
 
-      {error && <p className="text-red-500">{error}</p>} {/* Error message */}
+      {error && <p className="text-red-500">{error}</p>} 
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {movies.map((movie) => (
@@ -77,11 +75,8 @@ export default function MoviesPage() {
               <img
                 className="w-full h-64 object-cover rounded-lg"
                 src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
-                alt={movie.title}
-              />
+                alt={movie.title} />
               <h3 className="mt-2 text-lg font-medium text-white">{movie.title}</h3>
-
-              {/* Vote average circle */}
               <div className="absolute top-2 right-2">
                 <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 text-white font-bold">
                   {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}

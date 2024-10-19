@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation'; // Use useParams instead of useRouter for the new App Router
-import Link from 'next/link'; // Import Link for navigation
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function SearchResults() {
-  const { searchTerm } = useParams(); // Get search term from URL
+  const { searchTerm } = useParams();
   const [movies, setMovies] = useState([]);
   const [tvShows, setTvShows] = useState([]);
   const [actors, setActors] = useState([]);

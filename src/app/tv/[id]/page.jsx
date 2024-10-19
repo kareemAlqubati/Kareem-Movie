@@ -15,8 +15,8 @@ export default function MovieDetailsPage({ params }) {
   const fetchData = async (id) => {
     try {
       const [movieRes, creditsRes] = await Promise.all([
-        fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US`), // Corrected "api_key"
-        fetch(`https://api.themoviedb.org/3/tv/${id}/credits?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US`) // Corrected "api_key"
+        fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`), 
+        fetch(`https://api.themoviedb.org/3/tv/${id}/credits?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`) 
       ]);
 
       if (!movieRes.ok || !creditsRes.ok) {
