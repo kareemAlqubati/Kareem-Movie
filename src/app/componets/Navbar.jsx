@@ -17,11 +17,11 @@ export default function Navbar() {
   const moviesDropdownRef = useRef(null);
   const tvShowsDropdownRef = useRef(null);
 
+  // Auth State Listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -34,18 +34,15 @@ export default function Navbar() {
     e.preventDefault();
     if (searchTerm) {
       router.push(`/search/${searchTerm}`);
+      setSearchTerm(''); // Clear search term after submitting
     }
   };
 
   const handleClickOutside = (e) => {
-    if (
-      moviesDropdownRef.current && !moviesDropdownRef.current.contains(e.target)
-    ) {
+    if (moviesDropdownRef.current && !moviesDropdownRef.current.contains(e.target)) {
       setIsMoviesDropdownOpen(false);
     }
-    if (
-      tvShowsDropdownRef.current && !tvShowsDropdownRef.current.contains(e.target)
-    ) {
+    if (tvShowsDropdownRef.current && !tvShowsDropdownRef.current.contains(e.target)) {
       setIsTvShowsDropdownOpen(false);
     }
   };
@@ -58,22 +55,30 @@ export default function Navbar() {
   }, []);
 
   const handleMoviesDropdownClick = () => {
+    console.log('Movies dropdown clicked');
     setIsMoviesDropdownOpen((prev) => !prev);
     setIsTvShowsDropdownOpen(false); // Close TV shows dropdown if movies is clicked
   };
 
   const handleTvShowsDropdownClick = () => {
+    console.log('TV shows dropdown clicked');
     setIsTvShowsDropdownOpen((prev) => !prev);
     setIsMoviesDropdownOpen(false); // Close movies dropdown if TV shows is clicked
   };
 
+  const handleMobileDropdownClick = (url) => {
+    setIsMobileMenuOpen(false); // Close mobile menu
+    router.push(url); // Navigate to the selected page
+  };
+
   return (
-    <nav className="bg-gray-900 p-4  fixed w-full z-10 shadow-lg">
+    <nav className="bg-gray-900 p-4 fixed w-full z-10 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/" className="text-white text-3xl font-extrabold hover:text-blue-500 transition">
-          Kareem Movie 
+          Kareem Movie
         </Link>
         <div className="hidden md:flex items-center space-x-6">
+          {/* Movies Dropdown */}
           <div className="relative" ref={moviesDropdownRef}>
             <button
               className="text-white hover:text-blue-500 focus:outline-none"
@@ -98,6 +103,7 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* TV Shows Dropdown */}
           <div className="relative" ref={tvShowsDropdownRef}>
             <button
               className="text-white hover:text-blue-500 focus:outline-none"
@@ -126,6 +132,8 @@ export default function Navbar() {
             Actors
           </Link>
         </div>
+
+        {/* Search and User Auth */}
         <div className="hidden md:flex items-center space-x-6">
           <form onSubmit={handleSearch} className="flex items-center space-x-2">
             <input
@@ -192,8 +200,10 @@ export default function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden mt-4 bg-gray-800 rounded-md shadow-lg">
           <ul className="text-white py-2">
-            <li className="block px-4 py-2 hover:bg-gray-700 transition">
-              <button onClick={handleMoviesDropdownClick}>Movies</button>
+            <li className="block px-4 py-2">
+              <button onClick={handleMoviesDropdownClick} className="w-full text-left">
+                Movies
+              </button>
               {isMoviesDropdownOpen && (
                 <ul className="pl-4">
                   {['Top Rated', 'Popular', 'Now Playing', 'Upcoming'].map((label) => (
@@ -201,10 +211,7 @@ export default function Navbar() {
                       <Link
                         href={`/movie?category=${label.toLowerCase()}`}
                         className="block px-4 py-2 hover:bg-gray-700 transition"
-                        onClick={() => {
-                          setIsMoviesDropdownOpen(false); // Close on link click
-                          setIsMobileMenuOpen(false); // Close mobile menu
-                        }}
+                        onClick={() => handleMobileDropdownClick(`/movie?category=${label.toLowerCase()}`)} 
                       >
                         {label}
                       </Link>
@@ -214,8 +221,10 @@ export default function Navbar() {
               )}
             </li>
 
-            <li className="block px-4 py-2 hover:bg-gray-700 transition">
-              <button onClick={handleTvShowsDropdownClick}>TV Shows</button>
+            <li className="block px-4 py-2">
+              <button onClick={handleTvShowsDropdownClick} className="w-full text-left">
+                TV Shows
+              </button>
               {isTvShowsDropdownOpen && (
                 <ul className="pl-4">
                   {['Top Rated', 'Popular', 'On The Air', 'Airing Today'].map((label) => (
@@ -223,10 +232,7 @@ export default function Navbar() {
                       <Link
                         href={`/tv?category=${label.toLowerCase().replace(' ', '-')}`}
                         className="block px-4 py-2 hover:bg-gray-700 transition"
-                        onClick={() => {
-                          setIsTvShowsDropdownOpen(false); // Close on link click
-                          setIsMobileMenuOpen(false); // Close mobile menu
-                        }}
+                        onClick={() => handleMobileDropdownClick(`/tv?category=${label.toLowerCase().replace(' ', '-')}`)} // Navigate and close
                       >
                         {label}
                       </Link>
@@ -236,12 +242,14 @@ export default function Navbar() {
               )}
             </li>
 
-            <li className="block px-4 py-2 hover:bg-gray-700 transition">
-              <Link href="/actors">Actors</Link>
+            <li className="block px-4 py-2">
+              <Link href="/actors" className="hover:bg-gray-700 transition" onClick={() => setIsMobileMenuOpen(false)}>
+                Actors
+              </Link>
             </li>
 
             <li className="block px-4 py-2">
-              <form onSubmit={handleSearch} className="flex items-center space-x-2">
+              <form onSubmit={handleSearch} className="flex items-center space-x-2" onClick={() => setIsMobileMenuOpen(false)}>
                 <input
                   type="text"
                   className="px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none"
@@ -271,12 +279,12 @@ export default function Navbar() {
             ) : (
               <>
                 <li className="block px-4 py-2">
-                  <Link href="/Login" className="hover:bg-gray-700 transition">
+                  <Link href="/Login" className="hover:bg-gray-700 transition" onClick={() => setIsMobileMenuOpen(false)}>
                     Login
                   </Link>
                 </li>
                 <li className="block px-4 py-2">
-                  <Link href="/Register" className="hover:bg-gray-700 transition">
+                  <Link href="/Register" className="hover:bg-gray-700 transition" onClick={() => setIsMobileMenuOpen(false)}>
                     Register
                   </Link>
                 </li>
