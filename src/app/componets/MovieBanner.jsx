@@ -1,14 +1,17 @@
 'use client';
 
+import Image from 'next/image'; 
+
 export default function MovieBanner() {
   return (
-  
     <div className="relative h-screen w-full bg-gray-900 p-8">
       <div className="absolute inset-0">
-        <img
-          src="2208.q703.021.S.m004.c12.FP movie film cinema poster banner.jpg"
+        <Image
+          src="/2208.q703.021.S.m004.c12.FP movie film cinema poster banner.jpg"
           alt="Movie Banner"
-          className="h-full w-full object-cover filter blur-sm"
+          layout="fill" 
+          objectFit="cover" 
+          className="filter blur-sm"
         />
       </div>
       <div className="relative z-10 flex flex-col items-center justify-center text-center h-full text-slate-800 px-6 pt-16">

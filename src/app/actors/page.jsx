@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ActorsPage() {
   const [actors, setActors] = useState([]);
@@ -27,6 +28,7 @@ export default function ActorsPage() {
 
     fetchActors();
   }, [page]); 
+
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage(page - 1); 
@@ -50,9 +52,11 @@ export default function ActorsPage() {
             {actors.map((actor) => (
               <div key={actor.id} className="bg-gray-800 p-4 rounded-lg">
                 <Link href={`/actors/${actor.id}`}>
-                  <img
+                  <Image
                     src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
                     alt={actor.name}
+                    width={500} 
+                    height={750} 
                     className="w-full h-64 object-cover rounded-lg cursor-pointer"
                   />
                   <h3 className="text-white mt-2">{actor.name}</h3>

@@ -1,6 +1,8 @@
 'use client';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Image from 'next/image'; 
 
 export default function ActorDetailsPage({ params }) {
   const { id } = params;
@@ -32,7 +34,7 @@ export default function ActorDetailsPage({ params }) {
     }
   };
 
-  const showMoreMovies = () => setVisibleMovies((prev) => prev + 5);
+  const showMoreMovies = () => setVisibleMovie((prev) => prev + 5);
 
   if (!actor) return <div className="text-center text-white">Loading...</div>;
 
@@ -49,10 +51,12 @@ export default function ActorDetailsPage({ params }) {
       />
       <div className="bg-black bg-opacity-80 p-6 rounded-lg shadow-2xl max-w-4xl w-full">
         <div className="flex flex-col md:flex-row md:space-x-8 items-start">
-          <img
+          <Image
             className="w-full md:w-1/3 rounded-lg shadow-md"
             src={actor.profile_path ? `https://image.tmdb.org/t/p/w500/${actor.profile_path}` : '/placeholder-image.jpg'}
             alt={actor.name}
+            width={500} 
+            height={750}
           />
           <div className="mt-6 md:mt-0 text-white">
             <h1 className="text-4xl font-bold mb-2">{actor.name}</h1>
@@ -69,10 +73,12 @@ export default function ActorDetailsPage({ params }) {
           {movie.slice(0, visibleMovie).map((movie) => (
             <div key={movie.id} className="text-center">
               <Link href={`/movie/${movie.id}`}>
-                <img
+                <Image
                   className="w-24 h-36 object-cover rounded-lg mx-auto shadow-md transition-transform transform hover:scale-105"
                   src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
                   alt={movie.title}
+                  width={100} 
+                  height={150} 
                 />
               </Link>
               <p className="text-white text-sm mt-2">{movie.title}</p>

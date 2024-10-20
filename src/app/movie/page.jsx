@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { auth } from '../firebaseConfig'; 
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import Image from 'next/image'; 
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState([]);
@@ -115,10 +116,12 @@ export default function MoviesPage() {
           <div key={movie.id} className="relative">
             <Link href={`/movie/${movie.id}`} className="block">
               <div className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative">
-                <img
+                <Image
                   className="w-full h-64 object-cover rounded-lg"
                   src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
                   alt={movie.title}
+                  width={500} 
+                  height={400} 
                 />
                 <h3 className="mt-2 text-lg font-medium text-white">{movie.title}</h3>
                 <div className="absolute top-2 right-2">

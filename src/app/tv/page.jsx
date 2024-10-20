@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { auth } from '../firebaseConfig'; 
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore'; 
 import { onAuthStateChanged } from 'firebase/auth';
+import Image from 'next/image'; 
 
 export default function TVShowsPage() {
   const [tvShows, setTvShows] = useState([]);
@@ -95,10 +96,12 @@ export default function TVShowsPage() {
           <div key={show.id} className="relative">
             <Link href={`/tv/${show.id}`} className="block">
               <div className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative">
-                <img
+                <Image
                   className="w-full h-64 object-cover rounded-lg"
                   src={show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '/placeholder-image.jpg'}
                   alt={show.name}
+                  width={500} 
+                  height={300}
                 />
                 <h3 className="mt-2 text-lg font-medium text-white">{show.name}</h3>
                 <div className="absolute top-2 right-2">
@@ -110,7 +113,7 @@ export default function TVShowsPage() {
             </Link>
             {user && (
               <button
-                className="absolute bottom-4 right-4 p-2 rounded-full "
+                className="absolute bottom-4 right-4 p-2 rounded-full"
                 onClick={() => handleLikeShow(show.id)}
               >
                 {likedShows.includes(show.id) ? '❤️' : '🤍'}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image'; 
 
 export default function SearchResults() {
   const { searchTerm } = useParams();
@@ -53,7 +54,7 @@ export default function SearchResults() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold">Search Results for "{searchTerm}"</h1>
+      <h1 className="text-2xl font-bold">Search Results for &quot;{searchTerm}&quot;</h1>
 
       <h2 className="text-xl mt-4">Movies</h2>
       {movies.length > 0 ? (
@@ -61,13 +62,14 @@ export default function SearchResults() {
           {movies.map((movie) => (
             <div key={movie.id} className="bg-gray-800 p-4 rounded-lg">
               <Link href={`/movie/${movie.id}`}>
-
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  <h3 className="text-white mt-2">{movie.title}</h3>
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  width={500}
+                  height={750} 
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+                <h3 className="text-white mt-2">{movie.title}</h3>
               </Link>
             </div>
           ))}
@@ -82,13 +84,14 @@ export default function SearchResults() {
           {tvShows.map((show) => (
             <div key={show.id} className="bg-gray-800 p-4 rounded-lg">
               <Link href={`/tv/${show.id}`}>
-               
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-                    alt={show.name}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  <h3 className="text-white mt-2">{show.name}</h3>
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
+                  alt={show.name}
+                  width={500} 
+                  height={750} 
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+                <h3 className="text-white mt-2">{show.name}</h3>
               </Link>
             </div>
           ))}
@@ -103,13 +106,14 @@ export default function SearchResults() {
           {actors.map((actor) => (
             <div key={actor.id} className="bg-gray-800 p-4 rounded-lg">
               <Link href={`/actor/${actor.id}`}>
-               
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
-                    alt={actor.name}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  <h3 className="text-white mt-2">{actor.name}</h3>
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
+                  alt={actor.name}
+                  width={500} 
+                  height={750}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+                <h3 className="text-white mt-2">{actor.name}</h3>
               </Link>
             </div>
           ))}
