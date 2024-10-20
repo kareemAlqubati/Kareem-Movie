@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { auth } from '../firebaseConfig';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -13,6 +13,9 @@ export default function Navbar() {
   const [isTvShowsDropdownOpen, setIsTvShowsDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const router = useRouter();
+
+  const moviesDropdownRef = useRef(null);
+  const tvShowsDropdownRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -34,15 +37,136 @@ export default function Navbar() {
     }
   };
 
-  return (
-    <nav className="bg-gray-900 p-4 fixed w-full z-10 shadow-md">
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="text-white text-3xl font-bold hover:text-blue-400 transition">
-          Movie Kareem
-        </Link>
+  const handleClickOutside = (e) => {
+    if (
+      moviesDropdownRef.current && !moviesDropdownRef.current.contains(e.target)
+    ) {
+      setIsMoviesDropdownOpen(false);
+    }
+    if (
+      tvShowsDropdownRef.current && !tvShowsDropdownRef.current.contains(e.target)
+    ) {
+      setIsTvShowsDropdownOpen(false);
+    }
+  };
 
-        {/* Mobile Menu Toggle */}
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleMoviesDropdownClick = () => {
+    setIsMoviesDropdownOpen((prev) => !prev);
+    setIsTvShowsDropdownOpen(false); // Close TV shows dropdown if movies is clicked
+  };
+
+  const handleTvShowsDropdownClick = () => {
+    setIsTvShowsDropdownOpen((prev) => !prev);
+    setIsMoviesDropdownOpen(false); // Close movies dropdown if TV shows is clicked
+  };
+
+  return (
+    <nav className="bg-gray-900 p-4  fixed w-full z-10 shadow-lg">
+      <div className="container mx-auto flex items-center justify-between">
+        <Link href="/" className="text-white text-3xl font-extrabold hover:text-blue-500 transition">
+          Kareem Movie 
+        </Link>
+        <div className="hidden md:flex items-center space-x-6">
+          <div className="relative" ref={moviesDropdownRef}>
+            <button
+              className="text-white hover:text-blue-500 focus:outline-none"
+              onClick={handleMoviesDropdownClick}
+            >
+              Movies
+            </button>
+            {isMoviesDropdownOpen && (
+              <ul className="absolute left-0 mt-2 bg-gray-800 text-white rounded-md shadow-lg w-48 py-2 z-20">
+                {['Top Rated', 'Popular', 'Now Playing', 'Upcoming'].map((label) => (
+                  <li key={label}>
+                    <Link
+                      href={`/movie?category=${label.toLowerCase()}`}
+                      className="block px-4 py-2 hover:bg-gray-700 transition"
+                      onClick={() => setIsMoviesDropdownOpen(false)} // Close on link click
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="relative" ref={tvShowsDropdownRef}>
+            <button
+              className="text-white hover:text-blue-500 focus:outline-none"
+              onClick={handleTvShowsDropdownClick}
+            >
+              TV Shows
+            </button>
+            {isTvShowsDropdownOpen && (
+              <ul className="absolute left-0 mt-2 bg-gray-800 text-white rounded-md shadow-lg w-48 py-2 z-20">
+                {['Top Rated', 'Popular', 'On The Air', 'Airing Today'].map((label) => (
+                  <li key={label}>
+                    <Link
+                      href={`/tv?category=${label.toLowerCase().replace(' ', '-')}`}
+                      className="block px-4 py-2 hover:bg-gray-700 transition"
+                      onClick={() => setIsTvShowsDropdownOpen(false)} // Close on link click
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <Link href="/actors" className="text-white hover:text-blue-500 transition">
+            Actors
+          </Link>
+        </div>
+        <div className="hidden md:flex items-center space-x-6">
+          <form onSubmit={handleSearch} className="flex items-center space-x-2">
+            <input
+              type="text"
+              className="px-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button type="submit" className="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-sm">
+              Search
+            </button>
+          </form>
+
+          {user ? (
+            <div className="flex items-center space-x-4">
+              <div className="bg-gray-800 px-4 py-2 rounded-full text-white shadow-md">
+                {user.displayName || user.email}
+              </div>
+              <button
+                onClick={handleLogout}
+                className="text-white bg-red-600 px-4 py-2 rounded-lg hover:bg-red-500 transition shadow-md"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex space-x-4">
+              <Link href="/Login" className="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-md">
+                Login
+              </Link>
+              <Link href="/Register" className="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition shadow-md">
+                Register
+              </Link>
+            </div>
+          )}
+
+          <Darkmode />
+        </div>
+
+        {/* Mobile Menu Button */}
         <button
           className="text-white md:hidden focus:outline-none"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -62,121 +186,14 @@ export default function Navbar() {
             />
           </svg>
         </button>
-
-        {/* Desktop Menu */}
-        <div className={`hidden md:flex items-center space-x-6`}>
-          {/* Movies Dropdown */}
-          <div className="relative">
-            <button
-              className="text-white hover:text-blue-400 focus:outline-none"
-              onClick={() => setIsMoviesDropdownOpen(!isMoviesDropdownOpen)}
-            >
-              Movies
-            </button>
-            {isMoviesDropdownOpen && (
-              <ul className="absolute mt-2 bg-gray-800 text-white rounded-md shadow-lg w-48 py-2 z-20">
-                {['Top Rated', 'Popular', 'Now Playing', 'Upcoming'].map((label) => (
-                  <li key={label}>
-                    <Link
-                      href={`/movie?category=${label.toLowerCase()}`}
-                      className="block px-4 py-2 hover:bg-gray-700 transition"
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          {/* TV Shows Dropdown */}
-          <div className="relative">
-            <button
-              className="text-white hover:text-blue-400 focus:outline-none"
-              onClick={() => setIsTvShowsDropdownOpen(!isTvShowsDropdownOpen)}
-            >
-              TV Shows
-            </button>
-            {isTvShowsDropdownOpen && (
-              <ul className="absolute mt-2 bg-gray-800 text-white rounded-md shadow-lg w-48 py-2 z-20">
-                {['Top Rated', 'Popular', 'On The Air', 'Airing Today'].map((label) => (
-                  <li key={label}>
-                    <Link
-                      href={`/tv?category=${label.toLowerCase().replace(' ', '-')}`}
-                      className="block px-4 py-2 hover:bg-gray-700 transition"
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <Link href="/actors" className="text-white hover:text-blue-400 transition">
-            Actors
-          </Link>
-
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="flex items-center space-x-2">
-            <input
-              type="text"
-              className="px-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button type="submit" className="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition">
-              Search
-            </button>
-          </form>
-
-          {/* User Options */}
-          <div className="flex items-center space-x-6">
-            <Darkmode />
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2 bg-gray-800 px-4 py-2 rounded-full text-white shadow-lg">
-                  <span className="text-lg font-semibold">{user.displayName || user.email}</span>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="text-white bg-red-600 px-4 py-2 rounded-lg hover:bg-red-500 transition"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <>
-                <Link
-                  href="/Login"
-                  className="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/Register"
-                  className="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden mt-4 bg-gray-800 rounded-md shadow-lg">
-          <ul className="text-white rounded-md py-2">
-            <li>
-              <button
-                onClick={() => setIsMoviesDropdownOpen(!isMoviesDropdownOpen)}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-700 transition"
-              >
-                Movies
-              </button>
+          <ul className="text-white py-2">
+            <li className="block px-4 py-2 hover:bg-gray-700 transition">
+              <button onClick={handleMoviesDropdownClick}>Movies</button>
               {isMoviesDropdownOpen && (
                 <ul className="pl-4">
                   {['Top Rated', 'Popular', 'Now Playing', 'Upcoming'].map((label) => (
@@ -184,6 +201,10 @@ export default function Navbar() {
                       <Link
                         href={`/movie?category=${label.toLowerCase()}`}
                         className="block px-4 py-2 hover:bg-gray-700 transition"
+                        onClick={() => {
+                          setIsMoviesDropdownOpen(false); // Close on link click
+                          setIsMobileMenuOpen(false); // Close mobile menu
+                        }}
                       >
                         {label}
                       </Link>
@@ -193,13 +214,8 @@ export default function Navbar() {
               )}
             </li>
 
-            <li>
-              <button
-                onClick={() => setIsTvShowsDropdownOpen(!isTvShowsDropdownOpen)}
-                className="block w-full text-left px-4 py-2 hover:bg-gray-700 transition"
-              >
-                TV Shows
-              </button>
+            <li className="block px-4 py-2 hover:bg-gray-700 transition">
+              <button onClick={handleTvShowsDropdownClick}>TV Shows</button>
               {isTvShowsDropdownOpen && (
                 <ul className="pl-4">
                   {['Top Rated', 'Popular', 'On The Air', 'Airing Today'].map((label) => (
@@ -207,6 +223,10 @@ export default function Navbar() {
                       <Link
                         href={`/tv?category=${label.toLowerCase().replace(' ', '-')}`}
                         className="block px-4 py-2 hover:bg-gray-700 transition"
+                        onClick={() => {
+                          setIsTvShowsDropdownOpen(false); // Close on link click
+                          setIsMobileMenuOpen(false); // Close mobile menu
+                        }}
                       >
                         {label}
                       </Link>
@@ -216,13 +236,11 @@ export default function Navbar() {
               )}
             </li>
 
-            <li>
-              <Link href="/actors" className="block px-4 py-2 hover:bg-gray-700 transition">
-                Actors
-              </Link>
+            <li className="block px-4 py-2 hover:bg-gray-700 transition">
+              <Link href="/actors">Actors</Link>
             </li>
 
-            <li className="px-4 py-2">
+            <li className="block px-4 py-2">
               <form onSubmit={handleSearch} className="flex items-center space-x-2">
                 <input
                   type="text"
@@ -237,12 +255,12 @@ export default function Navbar() {
               </form>
             </li>
 
-            <li className="px-4 py-2">
+            <li className="block px-4 py-2">
               <Darkmode />
             </li>
 
             {user ? (
-              <li className="px-4 py-2">
+              <li className="block px-4 py-2">
                 <button
                   onClick={handleLogout}
                   className="w-full text-left bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition"
@@ -252,13 +270,13 @@ export default function Navbar() {
               </li>
             ) : (
               <>
-                <li>
-                  <Link href="/Login" className="block px-4 py-2 hover:bg-gray-700 transition">
+                <li className="block px-4 py-2">
+                  <Link href="/Login" className="hover:bg-gray-700 transition">
                     Login
                   </Link>
                 </li>
-                <li>
-                  <Link href="/Register" className="block px-4 py-2 hover:bg-gray-700 transition bg-blue-600 rounded-md">
+                <li className="block px-4 py-2">
+                  <Link href="/Register" className="hover:bg-gray-700 transition">
                     Register
                   </Link>
                 </li>

@@ -26,28 +26,32 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-6"> {/* Add px-4 for horizontal padding */}
+    <div className="container mx-auto px-4 py-6">
       <MovieBanner />
-      <h1 className="text-3xl font-bold text-blue-500 capitalize mb-4">Latest Movies</h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <h1 className="text-2xl font-bold text-blue-500 capitalize m-4 text-center">Latest Movies</h1>
+      
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4">
         {latestMovies.map((movie) => (
           <Link key={movie.id} href={`/movie/${movie.id}`}>
-            <div className="bg-gray-800 border border-gray-700 p-4 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer">
-              <Image
-                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
-                alt={movie.title}
-                className="rounded-md mb-2 transition duration-300 transform hover:scale-105"
-                width={300} 
-                height={450} 
-              />
-              <h2 className="text-lg font-semibold text-white mb-1">{movie.title}</h2>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-blue-400 font-bold">{movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</span>
-                <button className="bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition">
+            <div className="bg-gray-800 border border-gray-700 p-3 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer group">
+              <div className="flex justify-center mb-3">
+                <Image
+                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
+                  alt={movie.title}
+                  className="rounded-md w-full h-auto transition duration-300 transform group-hover:scale-105"
+                  width={180}
+                  height={270} 
+                />
+              </div>
+              <h2 className="text-sm font-semibold text-white text-center mb-1 transition duration-200 group-hover:text-blue-400">
+                {movie.title}
+              </h2>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-blue-400 font-bold text-sm">{movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</span>
+                <button className="bg-blue-600 text-white text-xs px-2 py-1 rounded-md hover:bg-blue-700 transition">
                   Watch
                 </button>
               </div>
-              <span className="text-blue-400 hover:text-blue-300 transition duration-200">View Details</span>
             </div>
           </Link>
         ))}

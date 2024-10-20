@@ -88,7 +88,7 @@ export default function TVShowsPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-4xl font-bold text-center text-blue-500 dark:text-blue-400 mb-12">
+      <h1 className="text-4xl font-bold text-center text-blue-500 dark:text-blue-400 m-8">
         {category.replace('-', ' ')} TV Shows
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">

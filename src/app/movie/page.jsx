@@ -104,7 +104,7 @@ export default function MoviesPage() {
 
   return (
     <div className="container mx-auto p-4 m-4">
-      <h1 className="text-4xl font-bold text-center text-blue-500 dark:text-blue-400 mb-12">
+      <h1 className="text-4xl font-bold text-center text-blue-500 dark:text-blue-400 m-8">
         {category.replace('-', ' ')} Movies
       </h1>
 
@@ -123,7 +123,7 @@ export default function MoviesPage() {
                 width={500} 
                 height={400} 
               />
-              <h3 className="mt-2 text-lg font-medium text-white text-center">{movie.title}</h3>
+              <h3 className="mt-2 text-lg font-medium text-white text-center ">{movie.title}</h3>
               <div className="absolute top-2 right-2">
                 <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 text-white font-bold">
                   {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
