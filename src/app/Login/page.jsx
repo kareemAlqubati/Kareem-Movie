@@ -72,7 +72,7 @@ const Login = () => {
             Login
           </button>
         </form>
-        <p className="mt-4 text-center">Don't have an account?{' '}
+        <p className="mt-4 text-center">Dont have an account{' '}
           <Link href="/Register" className="text-blue-500">
             Register
           </Link>
