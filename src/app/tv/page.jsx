@@ -18,15 +18,15 @@ export default function TVShowsPage() {
   const getCategoryApiUrl = (category) => {
     switch (category) {
       case 'top-rated':
-        return 'https://api.themoviedb.org/3/tv/top_rated&include_adult=false';
+        return 'https://api.themoviedb.org/3/tv/top_rated';
       case 'popular':
-        return 'https://api.themoviedb.org/3/tv/popular&include_adult=false';
+        return 'https://api.themoviedb.org/3/tv/popular';
       case 'on-the-air':
-        return 'https://api.themoviedb.org/3/tv/on_the_air&include_adult=false';
+        return 'https://api.themoviedb.org/3/tv/on_the_air';
       case 'airing-today':
-        return 'https://api.themoviedb.org/3/tv/airing_today&include_adult=false';
+        return 'https://api.themoviedb.org/3/tv/airing_today';
       default:
-        return 'https://api.themoviedb.org/3/tv/on_the_air&include_adult=false'; 
+        return 'https://api.themoviedb.org/3/tv/on_the_air'; 
     }
   };
 

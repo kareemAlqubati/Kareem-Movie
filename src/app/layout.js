@@ -1,5 +1,5 @@
 import "./globals.css";
-import Providers from "./providers";
+import Providers from "./Providers";
 import Navbar from "./componets/Navbar";
 import Search from "./componets/Search";
 import Footer from "./componets/Footer";

@@ -19,15 +19,15 @@ export default function MoviesPage() {
   const getCategoryApiUrl = (category) => {
     switch (category) {
       case 'top-rated':
-        return 'https://api.themoviedb.org/3/movie/top_rated&include_adult=false';
+        return 'https://api.themoviedb.org/3/movie/top_rated';
       case 'popular':
-        return 'https://api.themoviedb.org/3/movie/popular&include_adult=false';
+        return 'https://api.themoviedb.org/3/movie/popular';
       case 'now-playing':
-        return 'https://api.themoviedb.org/3/movie/now_playing&include_adult=false';
+        return 'https://api.themoviedb.org/3/movie/now_playing';
       case 'upcoming':
-        return 'https://api.themoviedb.org/3/movie/upcoming&include_adult=false';
+        return 'https://api.themoviedb.org/3/movie/upcoming';
       default:
-        return 'https://api.themoviedb.org/3/movie/now_playing&include_adult=false'; 
+        return 'https://api.themoviedb.org/3/movie/now_playing'; 
     }
   };
 
