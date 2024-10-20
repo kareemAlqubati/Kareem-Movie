@@ -27,7 +27,7 @@ export default function ActorsPage() {
     };
 
     fetchActors();
-  }, [page]); 
+  }, [page]);
 
   const handlePreviousPage = () => {
     if (page > 1) {
@@ -42,33 +42,38 @@ export default function ActorsPage() {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-emerald-500">Popular Actors</h1>
+    <div className="container mx-auto p-6 m-4">
+      <h1 className="text-4xl font-bold text-center text-blue-500 dark:text-blue-400 mb-12">Popular Actors</h1>
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-center text-gray-700 dark:text-gray-300">Loading...</p>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
             {actors.map((actor) => (
-              <div key={actor.id} className="bg-gray-800 p-4 rounded-lg">
+              <div
+                key={actor.id}
+                className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition duration-300 border border-gray-200 dark:border-gray-700"
+              >
                 <Link href={`/actors/${actor.id}`}>
                   <Image
-                    src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
+                    src={actor.profile_path ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` : '/placeholder-image.jpg'}
                     alt={actor.name}
                     width={500} 
                     height={750} 
-                    className="w-full h-64 object-cover rounded-lg cursor-pointer"
+                    className="w-full h-64 object-cover rounded-lg"
                   />
-                  <h3 className="text-white mt-2">{actor.name}</h3>
+                  <h3 className="text-gray-900 dark:text-gray-100 text-lg font-semibold mt-4 text-center">
+                    {actor.name}
+                  </h3>
                 </Link>
               </div>
             ))}
           </div>
 
-          <div className="flex justify-between mt-6">
+          <div className="flex justify-center space-x-4 mt-12">
             <button
               onClick={handlePreviousPage}
-              className={`px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-500 transition duration-200 ${
+              className={`px-6 py-3 rounded-full  text-white bg-blue-600 ${
                 page === 1 ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               disabled={page === 1}
@@ -77,7 +82,7 @@ export default function ActorsPage() {
             </button>
             <button
               onClick={handleNextPage}
-              className={`px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-500 transition duration-200 ${
+              className={`px-6 py-3 rounded-full  bg-blue-600 text-white  ${
                 page === totalPages ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               disabled={page === totalPages}

@@ -46,7 +46,7 @@ export default function MovieDetailsPage({ params }) {
           filter: 'blur(12px)',
         }}
       />
-      <div className="bg-black bg-opacity-80 p-6 rounded-lg shadow-2xl max-w-4xl w-full">
+      <div className="  background-color: rgb(0 0 0 / 35%); bg-opacity-80 p-6 m-10 rounded-lg shadow-2xl max-w-4xl w-full z-0">
         <div className="flex flex-col md:flex-row md:space-x-8 items-start">
           <Image
             className="w-full md:w-1/3 rounded-lg shadow-md"
@@ -58,7 +58,7 @@ export default function MovieDetailsPage({ params }) {
           <div className="mt-6 md:mt-0 text-white">
             <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
             <div className="flex items-center mb-4">
-              <span className="bg-emerald-600 text-white rounded-full px-4 py-2 font-bold">
+              <span className="bg-blue-600 text-white rounded-full px-4 py-2 font-bold">
                 {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
               </span>
             </div>
@@ -91,7 +91,7 @@ export default function MovieDetailsPage({ params }) {
 
         {visibleActors < actors.length && (
           <div className="mt-6 flex justify-center">
-            <button onClick={showMoreActors} className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition">
+            <button onClick={showMoreActors} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
               Show More
             </button>
           </div>

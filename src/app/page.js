@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import MovieBanner from './componets/MovieBanner';
-import Image from 'next/image'; 
+import Image from 'next/image';
 
 export default function HomePage() {
   const [latestMovies, setLatestMovies] = useState([]);
@@ -26,26 +26,30 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto px-4 py-6"> {/* Add px-4 for horizontal padding */}
       <MovieBanner />
-      <h1 className="text-3xl font-bold text-emerald-500 capitalize mb-4">
-        Latest Movies
-      </h1>
+      <h1 className="text-3xl font-bold text-blue-500 capitalize mb-4">Latest Movies</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {latestMovies.map((movie) => (
-          <div key={movie.id} className="bg-gray-800 p-4 rounded-lg shadow-lg">
-            <Image
-              src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
-              alt={movie.title}
-              className="rounded-md mb-2"
-              width={500} 
-              height={750} 
-            />
-            <h2 className="text-xl font-semibold text-white">{movie.title}</h2>
-            <Link href={`/movie/${movie.id}`} className="text-emerald-500 hover:text-emerald-400 transition">
-              View Details
-            </Link>
-          </div>
+          <Link key={movie.id} href={`/movie/${movie.id}`}>
+            <div className="bg-gray-800 border border-gray-700 p-4 rounded-lg shadow-md transition-transform transform hover:scale-105 hover:shadow-xl cursor-pointer">
+              <Image
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
+                alt={movie.title}
+                className="rounded-md mb-2 transition duration-300 transform hover:scale-105"
+                width={300} 
+                height={450} 
+              />
+              <h2 className="text-lg font-semibold text-white mb-1">{movie.title}</h2>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-blue-400 font-bold">{movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}</span>
+                <button className="bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition">
+                  Watch
+                </button>
+              </div>
+              <span className="text-blue-400 hover:text-blue-300 transition duration-200">View Details</span>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

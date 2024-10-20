@@ -17,6 +17,7 @@ export default function MoviesPage() {
 
   const searchParams = useSearchParams(); 
   const category = searchParams.get('category') || 'now_playing'; 
+
   const getCategoryApiUrl = (category) => {
     switch (category) {
       case 'top-rated':
@@ -102,8 +103,8 @@ export default function MoviesPage() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-emerald-500 capitalize mb-4">
+    <div className="container mx-auto p-4 m-4">
+      <h1 className="text-4xl font-bold text-center text-blue-500 dark:text-blue-400 mb-12">
         {category.replace('-', ' ')} Movies
       </h1>
 
@@ -113,27 +114,25 @@ export default function MoviesPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {movies.map((movie) => (
-          <div key={movie.id} className="relative">
+          <div key={movie.id} className="relative border border-gray-700 rounded-lg overflow-hidden transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl bg-gray-800">
             <Link href={`/movie/${movie.id}`} className="block">
-              <div className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative">
-                <Image
-                  className="w-full h-64 object-cover rounded-lg"
-                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
-                  alt={movie.title}
-                  width={500} 
-                  height={400} 
-                />
-                <h3 className="mt-2 text-lg font-medium text-white">{movie.title}</h3>
-                <div className="absolute top-2 right-2">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 text-white font-bold">
-                    {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
-                  </div>
+              <Image
+                className="w-full h-64 object-cover"
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
+                alt={movie.title}
+                width={500} 
+                height={400} 
+              />
+              <h3 className="mt-2 text-lg font-medium text-white text-center">{movie.title}</h3>
+              <div className="absolute top-2 right-2">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 text-white font-bold">
+                  {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
                 </div>
               </div>
             </Link>
             {user && (
               <button
-                className="absolute bottom-4 right-4 p-2 rounded-full "
+                className="absolute bottom-4 right-4 p-2 rounded-full bg-blue-600 hover:bg-blue-500 transition duration-200 text-white"
                 onClick={() => handleLikeMovie(movie.id)}
               >
                 {likedMovies.includes(movie.id) ? '❤️' : '🤍'}

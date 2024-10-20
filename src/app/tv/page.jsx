@@ -88,14 +88,14 @@ export default function TVShowsPage() {
 
   return (
     <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold text-emerald-500 capitalize mb-4">
+      <h1 className="text-4xl font-bold text-center text-blue-500 dark:text-blue-400 mb-12">
         {category.replace('-', ' ')} TV Shows
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {tvShows.map((show) => (
           <div key={show.id} className="relative">
             <Link href={`/tv/${show.id}`} className="block">
-              <div className="bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative">
+              <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-xl hover:border-blue-500 dark:hover:border-blue-400 transition-shadow duration-300 relative">
                 <Image
                   className="w-full h-64 object-cover rounded-lg"
                   src={show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '/placeholder-image.jpg'}
@@ -103,9 +103,11 @@ export default function TVShowsPage() {
                   width={500} 
                   height={300}
                 />
-                <h3 className="mt-2 text-lg font-medium text-white">{show.name}</h3>
+                <h3 className="mt-2 text-lg font-medium text-gray-900 dark:text-white text-center">
+                  {show.name}
+                </h3>
                 <div className="absolute top-2 right-2">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center bg-blue-600 text-white font-bold">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-blue-600 dark:bg-blue-400 text-white font-bold">
                     {show.vote_average.toFixed(1)}
                   </div>
                 </div>
@@ -113,7 +115,7 @@ export default function TVShowsPage() {
             </Link>
             {user && (
               <button
-                className="absolute bottom-4 right-4 p-2 rounded-full"
+                className="absolute bottom-4 right-4 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-red-100 dark:hover:bg-red-800 transition-all"
                 onClick={() => handleLikeShow(show.id)}
               >
                 {likedShows.includes(show.id) ? '❤️' : '🤍'}

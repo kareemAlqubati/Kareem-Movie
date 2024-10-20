@@ -1,13 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import Image from 'next/image'; 
+import Image from 'next/image';
 
 export default function MovieDetailsPage({ params }) {
   const { id } = params;
   const [movie, setMovie] = useState(null);
   const [actors, setActors] = useState([]);
   const [visibleActors, setVisibleActors] = useState(5);
+  const [showFullOverview, setShowFullOverview] = useState(false); 
 
   useEffect(() => {
     if (id) fetchData(id);
@@ -16,8 +17,8 @@ export default function MovieDetailsPage({ params }) {
   const fetchData = async (id) => {
     try {
       const [movieRes, creditsRes] = await Promise.all([
-        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`), 
-        fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`) 
+        fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`),
+        fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=05dcd03bf018854f4f916bca11dc23e4&language=en-US&include_adult=false`)
       ]);
 
       if (!movieRes.ok || !creditsRes.ok) {
@@ -38,7 +39,7 @@ export default function MovieDetailsPage({ params }) {
   if (!movie) return <div className="text-center text-white">Loading...</div>;
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800 ">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-40"
         style={{
@@ -46,7 +47,7 @@ export default function MovieDetailsPage({ params }) {
           filter: 'blur(12px)',
         }}
       />
-      <div className="bg-black bg-opacity-80 p-6 rounded-lg shadow-2xl max-w-4xl w-full">
+      <div className="background-color: rgb(0 0 0 / 35%); z-0 m-10 bg-opacity-80 p-6 rounded-lg shadow-2xl max-w-4xl w-full">
         <div className="flex flex-col md:flex-row md:space-x-8 items-start">
           <Image
             className="w-full md:w-1/3 rounded-lg shadow-md"
@@ -58,11 +59,22 @@ export default function MovieDetailsPage({ params }) {
           <div className="mt-6 md:mt-0 text-white">
             <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
             <div className="flex items-center mb-4">
-              <span className="bg-emerald-600 text-white rounded-full px-4 py-2 font-bold">
+              <span className="bg-blue-600 text-white rounded-full px-4 py-2 font-bold">
                 {movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}
               </span>
             </div>
-            <p className="text-gray-300">{movie.overview}</p>
+            <p className="text-gray-300">
+              {showFullOverview ? movie.overview : `${movie.overview.slice(0, 200)}...`}
+            </p>
+            {movie.overview.length > 200 && (
+              <button
+                onClick={() => setShowFullOverview(!showFullOverview)}
+                className="text-blue-400 mt-2"
+              >
+                {showFullOverview ? 'Show Less' : 'Show More'}
+              </button>
+            )}
+
             <div className="mt-4">
               <p><strong>Release Date:</strong> {movie.release_date}</p>
               <p><strong>Votes:</strong> {movie.vote_count}</p>
@@ -80,7 +92,7 @@ export default function MovieDetailsPage({ params }) {
                   src={actor.profile_path ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` : '/placeholder-image.jpg'}
                   alt={actor.name}
                   width={96}
-                  height={144} 
+                  height={144}
                 />
               </Link>
               <p className="text-white text-sm mt-2">{actor.name}</p>
@@ -93,7 +105,7 @@ export default function MovieDetailsPage({ params }) {
           <div className="mt-6 flex justify-center">
             <button
               onClick={showMoreActors}
-              className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
             >
               Show More
             </button>

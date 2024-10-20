@@ -7,8 +7,8 @@ import Image from 'next/image';
 export default function ActorDetailsPage({ params }) {
   const { id } = params;
   const [actor, setActor] = useState(null);
-  const [movie, setMovies] = useState([]);
-  const [visibleMovie, setVisibleMovie] = useState(5);
+  const [movies, setMovies] = useState([]);
+  const [visibleMovies, setVisibleMovies] = useState(5);
 
   useEffect(() => {
     if (id) fetchData(id);
@@ -34,64 +34,70 @@ export default function ActorDetailsPage({ params }) {
     }
   };
 
-  const showMoreMovies = () => setVisibleMovie((prev) => prev + 5);
+  const showMoreMovies = () => setVisibleMovies((prev) => prev + 5);
 
   if (!actor) return <div className="text-center text-white">Loading...</div>;
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-gray-800">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 via-gray-800 to-black">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-40"
         style={{
           backgroundImage: actor.profile_path
             ? `url(https://image.tmdb.org/t/p/original/${actor.profile_path})`
             : 'url(/placeholder-image.jpg)', 
-          filter: 'blur(12px)',
+          filter: 'blur(10px)',
         }}
       />
-      <div className="bg-black bg-opacity-80 p-6 rounded-lg shadow-2xl max-w-4xl w-full">
-        <div className="flex flex-col md:flex-row md:space-x-8 items-start">
+      <div className="relative  background-color: rgb(0 0 0 / 35%); bg-opacity-90 p-8 rounded-xl shadow-2xl max-w-6xl  m-10 w-full z-0">
+        <div className="flex flex-col md:flex-row md:space-x-10 items-start">
           <Image
-            className="w-full md:w-1/3 rounded-lg shadow-md"
+            className="w-full md:w-1/3 rounded-lg shadow-lg"
             src={actor.profile_path ? `https://image.tmdb.org/t/p/w500/${actor.profile_path}` : '/placeholder-image.jpg'}
             alt={actor.name}
             width={500} 
             height={750}
           />
           <div className="mt-6 md:mt-0 text-white">
-            <h1 className="text-4xl font-bold mb-2">{actor.name}</h1>
-            <p className="text-gray-300">{actor.biography || 'Biography not available.'}</p>
-            <div className="mt-4">
-              <p><strong>Birthday:</strong> {actor.birthday || 'N/A'}</p>
-              <p><strong>Popularity:</strong> {actor.popularity ? actor.popularity.toFixed(1) : 'N/A'}</p>
+            <h1 className="text-5xl font-extrabold mb-4 tracking-wide text-gray-200">{actor.name}</h1>
+            <p className="text-gray-300 leading-relaxed mb-6">
+              {actor.biography ? actor.biography : 'Biography not available.'}
+            </p>
+            <div className="mt-4 space-y-3">
+              <p className="text-lg text-gray-200">
+                <strong>Birthday:</strong> {actor.birthday || 'N/A'}
+              </p>
+              <p className="text-lg text-gray-200">
+                <strong>Popularity:</strong> {actor.popularity ? actor.popularity.toFixed(1) : 'N/A'}
+              </p>
             </div>
           </div>
         </div>
 
-        <h2 className="mt-8 text-2xl font-semibold text-white">Movies</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
-          {movie.slice(0, visibleMovie).map((movie) => (
+        <h2 className="mt-12 text-4xl font-semibold text-white">Movies</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-8">
+          {movies.slice(0, visibleMovies).map((movie) => (
             <div key={movie.id} className="text-center">
               <Link href={`/movie/${movie.id}`}>
                 <Image
-                  className="w-24 h-36 object-cover rounded-lg mx-auto shadow-md transition-transform transform hover:scale-105"
+                  className="w-full h-auto object-cover rounded-lg mx-auto shadow-md transition-transform transform hover:scale-105 hover:shadow-xl"
                   src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '/placeholder-image.jpg'}
                   alt={movie.title}
-                  width={100} 
-                  height={150} 
+                  width={120} 
+                  height={180}
                 />
               </Link>
-              <p className="text-white text-sm mt-2">{movie.title}</p>
-              <p className="text-gray-400 text-xs">{movie.character}</p>
+              <p className="text-white text-lg mt-3 font-semibold">{movie.title}</p>
+              <p className="text-gray-400 text-sm">{movie.character}</p>
             </div>
           ))}
         </div>
 
-        {visibleMovie < movie.length && (
-          <div className="mt-6 flex justify-center">
+        {visibleMovies < movies.length && (
+          <div className="mt-10 flex justify-center">
             <button
               onClick={showMoreMovies}
-              className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition"
+              className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-8 py-3 rounded-full hover:from-blue-600 hover:to-indigo-700 transition-transform transform hover:scale-105 shadow-lg"
             >
               Show More
             </button>
